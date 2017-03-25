@@ -1,13 +1,11 @@
 
-# Build
+# Build and run
 
 ```sh
 yarn install
-yarn run build
+make
 ```
 
-# Run
+# Resources
 
-```sh
-node index.js
-```
+- https://astexplorer.net/
