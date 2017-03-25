@@ -1,9 +1,4 @@
 {
-  "dependencies": {
-    "babel-generator": "^6.24.0",
-    "babel-traverse": "^6.23.1",
-    "babylon": "^6.16.1"
-  },
   "name": "gpujs-frontend",
   "version": "1.0.0",
   "main": "index.js",
@@ -12,5 +7,17 @@
   "repository": {
     "url": "git@github.com:dariusf/gpujs-frontend.git",
     "type": "git"
+  },
+  "dependencies": {
+    "babel-generator": "^6.24.0",
+    "babel-traverse": "^6.23.1",
+    "babylon": "^6.16.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-latest": "^6.24.0"
+  },
+  "scripts": {
+    "build": "babel src -d build"
   }
 }
