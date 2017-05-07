@@ -1,3 +1,6 @@
 {
-    "presets": ["latest"]
+    "presets": [
+        "env",
+        "stage-3", // for object-rest-spread
+    ]
 }

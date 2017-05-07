@@ -1,51 +1,51 @@
 
 import {parse} from 'babylon';
 import generate from 'babel-generator';
-import traverse from "babel-traverse";
 
 function prettyPrint(ast) {
   return generate(ast).code;
 }
 
-function compile() {
-  const ast = parse("var a = 1 + 2");
+function visit(node, visitor) {
+  return visitor.visit(node);
+}
 
-  let buffer = [];
+function traverse(node) {
+  return visit(node, {
 
-  traverse(ast, {
-    VariableDeclaration(path) {
-      path.node.declarations.forEach(n => {
-        buffer.push('int');
-        buffer.push(n.id.name);
-        buffer.push('=');
-      });
+    visit(node) {
+      const f = this[node.type];
+      return f.call(this, node);
     },
 
-    BinaryExpression(path) {
-      console.log('bin exp');
-      switch (path.node.operator) {
-        case '+':
-          buffer.push('+');
-      }
+    BinaryExpression(node) {
+      return [traverse(node.left), node.operator, traverse(node.right)].join(' ');
     },
 
-    NumericLiteral(path) {
-      buffer.push(path.node.value);
-    },
-  
-    enter(path) {
-      // console.log('enter');
+    NumericLiteral(node) {
+      return node.value + '';
     },
 
-    exit(path) {
-      switch (path.type) {
-        case 'VariableDeclaration':
-          buffer.push(';');
-      }
+    Program(node) {
+      return node.body.map(traverse).join('\n');
+    },
+
+    ExpressionStatement(node) {
+      return traverse(node.expression);
+    },
+
+    File(node) {
+      return traverse(node.program);
     }
-  });
+  })
+}
 
-  return buffer.join(' ');
+function compile() {
+  // const ast = parse("var a = 1 + 2");
+  const ast = parse("1 + 2");
+
+  // use babel-types, source-map
+  return traverse(ast);
 };
 
 export { compile };
